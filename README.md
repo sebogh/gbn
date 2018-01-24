@@ -31,7 +31,9 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 würde so:
 
-[![](intro.png)](intro.pdf)
+<div style="text-align:center">
+    <a href="intro.pdf"><img src="intro.png"></a>
+</div>
 
 rendern.
 
