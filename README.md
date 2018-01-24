@@ -2,7 +2,7 @@
 
 ## Einleitung
 
-*gbn* ist eine Klasse zum Erstellen deutscher Briefe nach [DIN 5008](http://de:wikipedia:org/wiki/DIN_5008).
+*gbn* ist eine Klasse zum Erstellen deutscher Briefe nach [DIN 5008](http://de.wikipedia.org/wiki/DIN_5008).
 
 (siehe auch [gbn.pdf](./gbn.pdf))
 
