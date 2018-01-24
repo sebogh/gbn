@@ -2,7 +2,7 @@
 
 ## Einleitung
 
-*gbn* ist eine Klasse zum Erstellen deutscher Briefe nach [DIN 5008].
+*gbn* ist eine Klasse zum Erstellen deutscher Briefe nach [DIN 5008](http://de:wikipedia:org/wiki/DIN_5008).
 
 (siehe auch [gbn.pdf](./gbn.pdf))
 
@@ -214,7 +214,4 @@ festgelegt werden.
     `TEXINPUTS` zu finden, dann reicht der Name der Datei.
 
 -   `\anlagen` Anlagen-Text (z.B. einfach “Anlagen” (siehe
-    [din-5008-richtlinien.de])
-
-  [DIN 5008]: http://de:wikipedia:org/wiki/DIN_5008
-  [din-5008-richtlinien.de]: din-5008-richtlinien.de
+    [din-5008-richtlinien.de](din-5008-richtlinien.de))
