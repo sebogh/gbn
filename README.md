@@ -13,14 +13,14 @@ Das folgende Minimal-Beispiel soll die Verwendung der Klasse demonstrieren:
 ~~~~ {.latex}
 \documentclass{gbn}
 \fromname {Sebastian Bogan}
-\fromstrassehaus {Kurfürstendamm 1}
+\fromstrassehaus {KurfÃ¼rstendamm 1}
 \fromplzort {10719 Berlin}
 \toanrede {Herr}
 \toname {Geneigter Leser}
 \tostrassehaus {Grunewaldstr. 1}
 \toplzort {13353 Berlin}
-\betreff{Groÿe Idee}
-\begruessung{Sehr geehrte Herr Leser,}
+\betreff{GroÃŸe Idee}
+\begruessung{Sehr geehrter Herr Leser,}
 \begin{document}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -29,8 +29,6 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 ## Optionen
 
-`subjectsep`
-
-:   Mittels `subjectsep=<dim>` kann der vertikale Abstand zwischen Datum und
-    Betreff verändert werden.
+*    `subjectsep`: Mittels `subjectsep=<dim>` kann der vertikale Abstand zwischen Datum und
+     Betreff verÃ¤ndert werden.
 
