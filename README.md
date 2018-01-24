@@ -10,7 +10,7 @@
 
 ### Beispiel
 
-Das folgende Minimal-Beispiel soll die Verwendung der Klasse demonstrieren:
+Das folgende Minimal-Beispiel:
 
 ~~~~ {.latex}
 \documentclass{gbn}
@@ -28,6 +28,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \end{document}
 ~~~~
+
+würde so:
+
+[![](intro.png)](intro.pdf)
+
+rendern.
 
 ## Optionen
 
