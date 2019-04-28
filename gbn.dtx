@@ -155,6 +155,9 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \DescribeMacro{plain} Mittels |plain| werden sämtliche Elemente der ersten
 % Seite weggelassen und der Text beginnt auf einer regulären Seite.
 %
+% \DescribeMacro{english} Mittels |english| wird das Paket |babel| ohne option
+% |ngerman| (d.h. |english|) gestartet.
+%
 % \DescribeMacro{gbnlastpage} Wenn die Option|gbnlastpage| gesetzt ist, 
 % wird der counter |gbnlastpage| angelegt und in der Fusszeile:
 % \begin{verbatim}<Seite>/|\arabic{gbnlastpage}\end{verbatim}
@@ -323,6 +326,7 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \DeclareStringOption[0 mm]{salutsep}
 \DeclareStringOption[0 mm]{bodysep}
 \DeclareBoolOption{plain}
+\DeclareBoolOption{english}
 \DeclareBoolOption{rules}
 \DeclareBoolOption{rulers}
 \DeclareBoolOption{gbnlastpage}
@@ -335,7 +339,11 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \RequirePackage{microtype}
 \RequirePackage{xcolor}
 \RequirePackage{calc}
+\ifGBN@english
+\RequirePackage{babel}
+\else
 \RequirePackage[ngerman]{babel}
+\fi
 \RequirePackage[utf8]{inputenc}
 \RequirePackage{setspace}
 \RequirePackage{hyperref}
