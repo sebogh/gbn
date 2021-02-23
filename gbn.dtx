@@ -364,7 +364,11 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \RequirePackage{graphicx}
 
 % Allgemeines Layout
-%\renewcommand{\familydefault}{cmss}
+
+\RequirePackage{fontspec}
+\setmainfont[Ligatures=TeX,Scale=1.0]{Open Sans}
+\setmonofont[Ligatures=TeX,Scale=1.1]{Ubuntu Mono}
+\linespread{1.25}
 
 \setlength{\oddsidemargin}{25mm - 1in}
 \setlength{\textwidth}{165mm}
@@ -609,7 +613,7 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
           \parbox[t][\GBN@addressHeight]{78mm}{\normalsize%
             \vfill%
             \parbox{78mm}{%
-              \setstretch{.9}%
+              \setstretch{1.15}%
               % without empty lines
               \ifx \GBN@toFirma\empty\else\GBN@toFirma\\\fi%
               \ifx \GBN@toAnrede\empty\else\GBN@toAnrede\\\fi%
