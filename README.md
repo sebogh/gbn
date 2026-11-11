@@ -1,217 +1,139 @@
 # gbn
 
-## Einleitung
+LaTeX-Klasse für deutsche Geschäftsbriefe nach
+[DIN 5008](https://de.wikipedia.org/wiki/DIN_5008) (Form A), passend für
+Fensterumschläge DIN lang (DL) und C6/5.
 
-*gbn* ist eine Klasse zum Erstellen deutscher Briefe nach [DIN 5008](http://de.wikipedia.org/wiki/DIN_5008).
+<p align="center">
+    <a href="intro.pdf"><img src="intro.png" width="640" alt="Beispielbrief (Kopf und Fuß der ersten Seite)"></a>
+</p>
 
-(siehe auch [gbn.pdf](./gbn.pdf))
+## Funktionen
 
-## Verwendung
+- Anschriftfeld, Rücksendeangabe und Zusatz- und Vermerkzone liegen
+  vollständig im Umschlagfenster, auch bei sechszeiligen Anschriften
+- Informationsblock rechts neben der Anschrift mit Bezugszeichen, Datum und
+  Seitenzahl
+- Fußzeile mit Anschrift, Kontakt und Bankverbindung in festem Raster;
+  leere Spalten bleiben frei
+- Seitenzahlen ("Seite 1 von 2") nur bei mehrseitigen Briefen
+- Falz- und Lochmarken, Flattersatz, Unterschrift als Bild
+- Akzentfarbe und Schrift frei wählbar
 
-### Beispiel
+## Erste Schritte
 
-Das folgende Minimal-Beispiel:
+### Voraussetzungen
 
-~~~~ {.latex}
+- **XeLaTeX** (oder LuaLaTeX); pdfLaTeX wird nicht unterstützt, da die Klasse
+  `fontspec` verwendet
+- die LaTeX-Pakete `kvoptions`, `eso-pic`, `microtype`, `xcolor`, `babel`
+  (`ngerman`), `ragged2e`, `tabularx`, `hyperref`, `graphicx` und `fontspec`
+- optional die Schrift **Source Sans 3**; fehlt sie, wird TeX Gyre Heros
+  verwendet
+
+### Installation
+
+**Debian/Ubuntu**
+
+```sh
+sudo apt install texlive-xetex texlive-latex-recommended texlive-lang-german \
+                 fonts-adobe-sourcesans3
+```
+
+**macOS:** [MacTeX](https://www.tug.org/mactex/) installieren, Source Sans 3
+von [GitHub](https://github.com/adobe-fonts/source-sans/releases) laden und
+per Doppelklick installieren.
+
+**Windows:** [MiKTeX](https://miktex.org/) oder
+[TeX Live](https://www.tug.org/texlive/) installieren, Source Sans 3 wie
+unter macOS.
+
+Anschließend die Klasse erzeugen und ins persönliche TeX-Verzeichnis
+(`TEXMFHOME`, meist `~/texmf`) installieren:
+
+```sh
+make install
+```
+
+### Erster Brief
+
+```latex
 \documentclass{gbn}
-\fromname {Sebastian Bogan}
+
+\fromname        {Sebastian Bogan}
 \fromstrassehaus {Kurfürstendamm 1}
-\fromplzort {10719 Berlin}
-\toanrede {Herr}
-\toname {Geneigter Leser}
-\tostrassehaus {Grunewaldstr. 1}
-\toplzort {13353 Berlin}
-\betreff{Große Idee}
-\begruessung{Sehr geehrter Herr Leser,}
+\fromplzort      {10719 Berlin}
+\fromtelefon     {030\,121 2323 2323}
+\fromemail       {sebogh@qibli.net}
+\fromiban        {DE53\,1005\,0000\,1030\,2028\,50}
+
+\toanrede        {Herr}
+\toname          {Geneigter Leser}
+\tostrassehaus   {Grunewaldstr. 1}
+\toplzort        {13353 Berlin}
+
+\ihrzeichen      {GL-42}
+\betreff         {Große Idee}
+\begruessung     {Sehr geehrter Herr Leser,}
+
 \begin{document}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \end{document}
-~~~~
+```
 
-würde so:
+Übersetzen mit:
 
-<p align="center">
-    <a href="intro.pdf"><img src="intro.png"></a>
-</p>
+```sh
+xelatex brief.tex
+xelatex brief.tex   # zweiter Lauf für "Seite 1 von n"
+```
 
-rendern.
+## Verwendung
 
-## Optionen
+Die vollständige Referenz aller Optionen und Kommandos steht in
+[gbn.pdf](gbn.pdf). Hier die wichtigsten:
 
--   `subjectsep`: Mittels `subjectsep=<dim>` kann der vertikale Abstand zwischen
-    Datum und Betreff verändert werden.
+### Optionen
 
--   `salutsep` Mittels `salutsep=<dim>` kann der vertikale Abstand zwischen
-    Betreff und Begrüßung verändert werden.
+| Option | Bedeutung |
+|---|---|
+| `rules` | Linien unter der Kopfzeile und über der Fußzeile |
+| `plain` | ohne Elemente der ersten Seite (Anschrift, Kopf usw.) |
+| `english` | `babel` ohne `ngerman` laden |
+| `subjectsep=<dim>`, `salutsep=<dim>`, `bodysep=<dim>` | zusätzlicher Abstand vor dem Betreff, nach dem Betreff bzw. nach der Anrede |
 
--   `bodysep` Mittels `bodysep=<dim>` kann der vertikale Abstand zwischen
-    Betreff und Text verändert werden
+### Häufige Kommandos
 
--   `rules` Mittels `rules` werden Linien unterhalb der Kopfzeile und oberhalb
-    der Fußzeile gesetzt.
+| Bereich | Kommandos |
+|---|---|
+| Absender | `\fromtitel`, `\fromname`, `\fromstrassehaus`, `\fromplzort`, `\fromland`, `\fromtelefon`, `\fromemail`, `\fromhttp`, `\fromiban`, `\frombic` |
+| Empfänger | `\tofirma`, `\toanrede`, `\totitel`, `\toname`, `\tostrassehaus`, `\toplzort`, `\toland` |
+| Informationsblock | `\ihrzeichen`, `\ihrenachricht`, `\unserzeichen`, `\datum` (Standard `\today`) |
+| Vermerke | `\zvzone` (z.B. "Einschreiben"), `\zvztwo`, `\zvzthree` |
+| Inhalt | `\betreff`, `\begruessung`, `\gruss`, `\unterschrift`, `\signatur{<Bilddatei>}`, `\anlagen` |
 
--   `rulers` Mittels `rulers` wird ein Linieal eingeblendet diese Option dient
-    im Wensentlichen der Entwicklung.
+### Anpassen
 
--   `plain` Mittels `plain` werden sämtliche Elemente der ersten Seite
-    weggelassen und der Text beginnt auf einer regulären Seite.
+```latex
+\accentcolor{7A1F2B}             % Farbe des Namens im Kopf (HTML-Hex, ohne #)
+\mutedcolor{767676}              % Farbe für Beschriftungen und Marken
+\setmainfont{IBM Plex Sans}      % andere Schrift
+\telefontext{Tel.}               % Beschriftungen ändern
+```
 
--   `gbnlastpage` Wenn die Option`gbnlastpage` gesetzt ist, wird der counter
-    `gbnlastpage` angelegt und in der Fusszeile:
+## Entwicklung
 
-    ~~~~ {.latex}
-    <Seite>/|\arabic{gbnlastpage}
-    ~~~~
+Klasse, Dokumentation und Testbriefe stammen aus `gbn.dtx` (docstrip);
+`gbn.ins` erzeugt daraus `gbn.cls`, `test-simple.tex` und `test-complete.tex`.
 
-    statt:
+| Befehl | Ergebnis |
+|---|---|
+| `make` | Klasse, Dokumentation `gbn.pdf` und Testbriefe |
+| `make install` | `gbn.cls` nach `TEXMFHOME/tex/latex/gbn/` und die Dokumentation `gbn.pdf` nach `TEXMFHOME/doc/latex/gbn/` installieren |
+| `make intro.png` | Bild oben aus dem Beispiel unter "Erster Brief" neu erzeugen (benötigt `poppler-utils` und `python3-pil`) |
+| `make clean` / `make tidy` | Hilfsdateien bzw. alle erzeugten Dateien löschen |
 
-    ~~~~ {.latex}
-    <Seite>/|\arabic{gbnlastpage}
-    ~~~~
+## Lizenz
 
-    verwendet. Auf diese Weise kann die Gesamt-Seitenzahl nach Bedarf angepasst
-    werden. Dies ist vor allem dann nützlich, wenn der `page` counter
-    zwischendurch zurückgesetzt werden muss/soll.
-
-## Kommandos
-
-### Farben
-
-Die folgenden Kommandos legen Farben fest. Jedes dieser Kommandos erwarte
-RGB-Tripel als Argument. Beispielsweise würde `\linecolor={1.0,0.0,1.0}` Magenta
-(Fuchsia) als Farbe für die Fenstermarkierungen und Faltmarken festlegen.
-
--   `\linecolor` Legt die Farbe der Fenstermarkierungen und der Faltmarken fest.
-
--   `\rulecolor` Legt die Farbe der Linie unterhalb der Kopfzeile oberhalb der
-    Fußzeile fest. Diese Einstellung hat nur sichtbare Auswirkungen, wenn die
-    Klassen-Option `rules` verwendet wird.
-
--   `\headercolor` Legt die Schriftfarbe der Kopfzeile fest.
-
--   `\footercolor` Legt die Schriftfarbe der Fußzeile fest.
-
--   `\retourcolor` Legt die Schriftfarbe der Rücksende-Adresse oberhalb der
-    Anschrift fest.
-
-### Beschreibende Texte
-
-Die folgenden Kommandos legen beschreibende Texte, die innerhalb der Fußzeile
-verwendet werden, fest. Jedes dieser Kommandos erwartet genau ein Argument. Das
-Argument kann ein einfacher Text oder komplexer Latex-Code sein. Mit
-`\TelefonText{Tel.:}`, z.B., würde der Text vor der Telefonnummer auf “Tel.:”
-festgelegt werden.
-
--   `\telefontext` beschreibender Text für die Telefonnummer des Absenders
-    (standarmäßig “Telefon:”)
-
--   `\telefaxtext` beschreibender Text für die Telefaxnummer des Absenders
-    (standarmäßig “Telefax:”)
-
--   `\emailtext` beschreibender Text für die E-Mail-Adresse des Absenders
-    (standarmäßig “E-Mail:”)
-
--   `\httptext` beschreibender Text für die HTTP-Adresses des Absenders
-    (standarmäßig “HTTP:”)
-
--   `\banktext` beschreibender Text für den Namen der Bank des Absenders
-    (standarmäßig “Bankverbindung:”)
-
--   `\blztext` beschreibender Text für die BLZ des Absenders (standarmäßig
-    “BLZ:”)
-
--   `\kontotext` beschreibender Text für die Kontonummer des Absenders
-    (standarmäßig “Konto:”)
-
--   `\blztext` beschreibender Text für die IBAN des Absenders (standarmäßig
-    “IBAN:”)
-
--   `\kontotext` beschreibender Text für die BIC des Absenders (standarmäßig
-    “BIC:”)
-
-### Header
-
--   `\headername` Name (Text) der im Header angezeigt wird (standardmäßig
-    `\fromname`)
-
-### Absender
-
--   `\fromtitel` akademischer Titel des Absenders (z.B. “Dr.”)
-
--   `\fromname` Vor- und Nachname des Absenders
-
--   `\fromstrassehaus` Straße des Absenders
-
--   `\fromplzort` Postleitzahl des Absenders
-
--   `\fromland` Land des Absenders
-
--   `\fromtelefon` Telefon des Absenders
-
--   `\fromtelefax` Telefax des Absenders
-
--   `\fromemail` E-Mail-Adresse des Absenders (z.B. “sebogh@qibli.net”)
-
--   `\fromhttp` HTTP-Adresse des Absenders
-
--   `\frombank` Name der Bank des Absenders (wird nur verwendet, wenn die
-    `\fromiban` nicht gesetzt ist und sowohl `\fromblz` als auch `\fromkonto`
-    gesetzt sind)
-
--   `\fromblz` BLZ des Absenders (wird nur verwendet, wenn die `\fromiban` nicht
-    gesetzt ist und sowohl `\frombank` als auch `\fromkonto` gesetzt sind)
-
--   `\fromkonto` Kontonummer des Absenders (wird nur verwendet, wenn die
-    `\fromiban` nicht gesetzt ist und sowohl `\frombank` als auch `\fromblz`
-    gesetzt sind)
-
--   `\fromiban` IBAN des Absenders
-
--   `\frombic` BIC des Absenders
-
-### Empfänger
-
--   `\tofirma` Empfänger-Firma
-
--   `\toanrede` Anrede für den Empfänger (“Frau” oder “Herr”)
-
--   `\totitel` akademischer Titel des Empfängers
-
--   `\toname` Vor- und Nachname des Empfängers
-
--   `\tostrassehaus` Straße des Empfängers
-
--   `\toplzort` Postleitzahl des Empfängers
-
--   `\toland` Land des Empfängers
-
-### Zusatz- und Vermerkzone
-
--   `\zvzthree` 3. Zusatz- und Vermerkzone (z.B. elektronische
-    Freimachungsvermerke)
-
--   `\zvztwo` 2. Zusatz- und Vermerkzone (z.B. Vorausverfügung “Nicht
-    nachsenden!” bzw. “Bei Umzug mit neuer Anschrift zurück!”)
-
--   `\zvzone` 1. Zusatz- und Vermerkzone (z.B. “Einschreiben/Recommandé”)
-
-### Sonstiges
-
--   `\datum` Datum des Schreibens (standarmäßig `\today`)
-
--   `\begruessung` Begrüßungstext (z.B. “Sehr geehrter Herr Bogan,”)
-
--   `\betreff` Betreff
-
--   `\gruss` Gruß (standardmäßig “Mit freundlichen Grüßen”)
-
--   `\unterschrift` Unterschrift (standardmäßig der Vor- und Nachname des
-    Absenders)
-
--   `\signatur` Signatur (Bild-Datei, die die Signatur enthält). Ist `\signatur`
-    gesetzt, dann wird `\unterschrift` ignoriert. Ist die Bild-Datei über die
-    `TEXINPUTS` zu finden, dann reicht der Name der Datei.
-
--   `\anlagen` Anlagen-Text (z.B. einfach “Anlagen” (siehe
-    [din-5008-richtlinien.de](din-5008-richtlinien.de))
+[MIT](LICENSE)

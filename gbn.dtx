@@ -2,24 +2,25 @@
 %
 % -*- encoding: utf-8; -*-
 %
-% Copyright (C) 2015 by Sebastian Bogan <sebogh@qibli.net>
+% Copyright (c) 2015-2026 Sebastian Bogan <sebogh@qibli.net>
 % -------------------------------------------------------
 %
-% This file may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.2
-% of this license or (at your option) any later version.
-% The latest version of this license is in:
-%
-%    http://www.latex-project.org/lppl.txt
-%
-% and version 1.2 or later is part of all distributions of LaTeX
-% version 1999/12/01 or later.
+% SPDX-License-Identifier: MIT
+% This file is licensed under the MIT License; see the file LICENSE.
 %
 % \fi
 %
 % \iffalse
 %<*driver>
 \ProvidesFile{gbn.dtx}
+%</driver>
+%<class>\NeedsTeXFormat{LaTeX2e}[2009/09/24]
+%<class>\ProvidesClass{gbn}
+%<*driver|class>
+% Einzige Stelle für Datum und Version (gilt für Klasse und Dokumentation)
+    [2026/11/11 v2.0.0 g-brief-new (gbn)]
+%</driver|class>
+%<*driver>
 \documentclass[a4paper]{ltxdoc}
 \RequirePackage[ngerman]{babel}
 \RequirePackage[utf8]{inputenc}
@@ -83,9 +84,14 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 
 \fromemail{sebogh@qibli.net}
+\fromhttp{qibli.net}
+\frombank{Berliner Bank}
 
-\linecolor{1.0,0.0,1.0}
-\telefontext{Tel.:}
+\ihrzeichen{AB-1234}
+\unserzeichen{sb}
+
+\accentcolor{7A1F2B}
+\telefontext{Tel.}
 
 \begin{document}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -98,6 +104,7 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \CheckSum{0}
 %
 % \changes{v0.1}{2015/12/12}{Initial version}
+% \changes{v2.0.0}{2026/11/11}{Modernisiertes Layout: Informationsblock, neue Fußzeile, Flattersatz, Hex-Farben}
 %
 % \GetFileInfo{gbn.dtx}
 %
@@ -137,8 +144,8 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \end{document}
 % \end{verbatim}
 % \subsection{Optionen}
-% \DescribeMacro{subjectsep} Mittels |subjectsep=|\meta{dim} kann der vertikale
-% Abstand zwischen Datum und Betreff verändert werden.
+% \DescribeMacro{subjectsep} Mittels |subjectsep=|\meta{dim} kann zusätzlicher
+% vertikaler Abstand vor dem Betreff eingefügt werden.
 %
 % \DescribeMacro{salutsep} Mittels |salutsep=|\meta{dim} kann der vertikale
 % Abstand zwischen Betreff und Begrüßung verändert werden.
@@ -158,69 +165,83 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \DescribeMacro{english} Mittels |english| wird das Paket |babel| ohne option
 % |ngerman| (d.h. |english|) gestartet.
 %
-% \DescribeMacro{gbnlastpage} Wenn die Option|gbnlastpage| gesetzt ist, 
-% wird der counter |gbnlastpage| angelegt und in der Fusszeile:
-% \begin{verbatim}<Seite>/|\arabic{gbnlastpage}\end{verbatim}
-% statt 
-% \begin{verbatim}<Seite>/|\lastpageref*{LastPage}\end{verbatim}
+% \DescribeMacro{gbnlastpage} Wenn die Option |gbnlastpage| gesetzt ist,
+% wird der counter |gbnlastpage| angelegt und als Gesamt-Seitenzahl
+% (\glqq{}Seite 1 von \meta{n}\grqq{}) statt der tatsächlichen Seitenzahl
 % verwendet. Auf diese Weise kann die Gesamt-Seitenzahl nach Bedarf angepasst
 % werden. Dies ist vor allem dann nützlich, wenn der |page| counter 
 % zwischendurch zurückgesetzt werden muss/soll.
 %
+% \subsection{Seitenzahlen}
+% Seitenzahlen (\glqq{}Seite 1 von 2\grqq{}) werden nur bei mehrseitigen
+% Briefen gesetzt: auf der ersten Seite im Informationsblock, auf den
+% Folgeseiten rechts unten. Die Gesamt-Seitenzahl wird in die |aux|-Datei
+% geschrieben, daher sind zwei \LaTeX-Läufe nötig.
+%
+% \subsection{Schrift}
+% Die Klasse benötigt Xe\LaTeX{} oder Lua\LaTeX{}. Als Schrift wird
+% \glqq{}Source Sans 3\grqq{} verwendet, falls installiert, sonst
+% \glqq{}TeX Gyre Heros\grqq{}. Eine andere Schrift kann in der Präambel mit
+% |\setmainfont{|\meta{Schrift}|}| gesetzt werden, z.B.
+% |\setmainfont{IBM Plex Sans}| oder (klassischer) |\setmainfont{Source Serif 4}|.
+%
 % \subsection{Kommandos}
 % \subsubsection{Farben}
-% Die folgenden Kommandos legen Farben fest. Jedes dieser Kommandos erwarte
-% RGB-Tripel als Argument. Beispielsweise würde |\linecolor={1.0,0.0,1.0}|
-% Magenta (Fuchsia) als Farbe für die Fenstermarkierungen und Faltmarken
-% festlegen.
+% Die folgenden Kommandos legen Farben fest. Jedes dieser Kommandos erwartet
+% einen HTML-Hex-Wert ohne |#| als Argument, z.B. |\accentcolor{7A1F2B}|.
 %
-% \DescribeMacro{\linecolor} Legt die Farbe der Fenstermarkierungen und der
-% Faltmarken fest.
+% \DescribeMacro{\accentcolor} Akzentfarbe für den Namen im Kopf und Links
+% (standardmäßig |1F3A5F|).
 %
-% \DescribeMacro{\rulecolor} Legt die Farbe der Linie unterhalb der Kopfzeile
-% oberhalb der Fußzeile fest. Diese Einstellung hat nur sichtbare Auswirkungen,
-% wenn die Klassen-Option |rules| verwendet wird.
-%
-% \DescribeMacro{\headercolor} Legt die Schriftfarbe der Kopfzeile fest.
-%
-% \DescribeMacro{\footercolor} Legt die Schriftfarbe der Fußzeile fest.
-%
-% \DescribeMacro{\retourcolor} Legt die Schriftfarbe der Rücksende-Adresse
-% oberhalb der Anschrift fest.
+% \DescribeMacro{\mutedcolor} Farbe für sekundären Text (Rücksendeangabe,
+% Beschriftungen in Informationsblock und Fußzeile, Seitenzahlen), Falz- und
+% Lochmarken sowie (aufgehellt) die Linien der Option |rules|
+% (standardmäßig |767676|).
 %
 % \subsubsection{Beschreibende Texte}
-% Die folgenden Kommandos legen beschreibende Texte, die innerhalb der Fußzeile
-% verwendet werden, fest. Jedes dieser Kommandos erwartet genau ein
+% Die folgenden Kommandos legen beschreibende Texte, die innerhalb des
+% Informationsblocks und der Fußzeile verwendet werden, fest. Jedes dieser Kommandos erwartet genau ein
 % Argument. Das Argument kann ein einfacher Text oder komplexer Latex-Code
-% sein. Mit |\TelefonText{Tel.:}|, z.B., würde der Text vor der Telefonnummer
-% auf \glqq{}Tel.:\grqq{} festgelegt werden.
+% sein. Mit |\telefontext{Tel.}|, z.B., würde der Text vor der Telefonnummer
+% auf \glqq{}Tel.\grqq{} festgelegt werden.
 %
-% \DescribeMacro{\telefontext} beschreibender Text für die Telefonnummer des
-% Absenders (standarmäßig \glqq{}Telefon:\grqq{})
+% \DescribeMacro{\telefontext} Telefonnummer (standardmäßig
+% \glqq{}Telefon\grqq{})
 %
-% \DescribeMacro{\telefaxtext} beschreibender Text für die Telefaxnummer des
-% Absenders (standarmäßig \glqq{}Telefax:\grqq{})
+% \DescribeMacro{\telefaxtext} Telefaxnummer (standardmäßig
+% \glqq{}Telefax\grqq{})
 %
-% \DescribeMacro{\emailtext} beschreibender Text für die E-Mail-Adresse des
-% Absenders (standarmäßig \glqq{}E-Mail:\grqq{})
+% \DescribeMacro{\emailtext} E-Mail-Adresse (standardmäßig
+% \glqq{}E-Mail\grqq{}, derzeit nicht angezeigt)
 %
-% \DescribeMacro{\httptext} beschreibender Text für die HTTP-Adresses des
-% Absenders (standarmäßig \glqq{}HTTP:\grqq{})
+% \DescribeMacro{\httptext} Web-Adresse (standardmäßig \glqq{}Web\grqq{},
+% derzeit nicht angezeigt)
 %
-% \DescribeMacro{\banktext} beschreibender Text für den Namen der Bank des
-% Absenders (standarmäßig \glqq{}Bankverbindung:\grqq{})
+% \DescribeMacro{\anschrifttext} Spaltenüberschrift Anschrift (standardmäßig
+% \glqq{}Anschrift\grqq{})
 %
-% \DescribeMacro{\blztext} beschreibender Text für die BLZ des Absenders
-% (standarmäßig \glqq{}BLZ:\grqq{})
+% \DescribeMacro{\kontakttext} Spaltenüberschrift Kontakt (standardmäßig
+% \glqq{}Kontakt\grqq{})
 %
-% \DescribeMacro{\kontotext} beschreibender Text für die Kontonummer des
-% Absenders (standarmäßig \glqq{}Konto:\grqq{})
+% \DescribeMacro{\banktext} Spaltenüberschrift Bankverbindung (standardmäßig
+% \glqq{}Bankverbindung\grqq{})
 %
-% \DescribeMacro{\blztext} beschreibender Text für die IBAN des Absenders
-% (standarmäßig \glqq{}IBAN:\grqq{})
+% \DescribeMacro{\ibantext} IBAN (standardmäßig \glqq{}IBAN\grqq{})
 %
-% \DescribeMacro{\kontotext} beschreibender Text für die BIC des Absenders
-% (standarmäßig \glqq{}BIC:\grqq{})
+% \DescribeMacro{\bictext} BIC (standardmäßig \glqq{}BIC\grqq{})
+%
+% \DescribeMacro{\ihrzeichentext} (standardmäßig \glqq{}Ihr Zeichen\grqq{})
+%
+% \DescribeMacro{\ihrenachrichttext} (standardmäßig \glqq{}Ihre Nachricht
+% vom\grqq{})
+%
+% \DescribeMacro{\unserzeichentext} (standardmäßig \glqq{}Unser
+% Zeichen\grqq{})
+%
+% \DescribeMacro{\datumtext} (standardmäßig \glqq{}Datum\grqq{})
+%
+% \DescribeMacro{\seitetext}, \DescribeMacro{\vontext} Seitenzahl
+% (standardmäßig \glqq{}Seite\grqq{} und \glqq{}von\grqq{})
 %
 % \subsubsection{Header}
 %
@@ -247,19 +268,10 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \DescribeMacro{\fromemail} E-Mail-Adresse des Absenders
 % (z.B. \glqq{}sebogh@qibli.net\grqq{})
 %
-% \DescribeMacro{\fromhttp} HTTP-Adresse des Absenders
+% \DescribeMacro{\fromhttp} Web-Adresse des Absenders, ohne |https://|
+% (z.B. \glqq{}qibli.net\grqq{})
 %
-% \DescribeMacro{\frombank} Name der Bank des Absenders (wird nur verwendet,
-% wenn die |\fromiban| nicht gesetzt ist und sowohl |\fromblz| als auch
-% |\fromkonto| gesetzt sind)
-%
-% \DescribeMacro{\fromblz} BLZ des Absenders (wird nur verwendet, wenn die
-% |\fromiban| nicht gesetzt ist und sowohl |\frombank| als auch |\fromkonto|
-% gesetzt sind)
-%
-% \DescribeMacro{\fromkonto} Kontonummer des Absenders (wird nur verwendet, wenn
-% die |\fromiban| nicht gesetzt ist und sowohl |\frombank| als auch |\fromblz|
-% gesetzt sind)
+% \DescribeMacro{\frombank} Name der Bank des Absenders
 %
 % \DescribeMacro{\fromiban} IBAN des Absenders
 %
@@ -294,6 +306,17 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 % \DescribeMacro{\zvzone} 1. Zusatz- und Vermerkzone
 % (z.B. \glqq{}Einschreiben/Recommandé\grqq{})
 %
+% \subsubsection{Informationsblock}
+% Der Informationsblock steht nach DIN 5008 rechts neben dem Anschriftfeld und
+% enthält die gesetzten Bezugszeichen, das Datum und bei mehrseitigen Briefen
+% die Seitenzahl.
+%
+% \DescribeMacro{\ihrzeichen} Zeichen des Empfängers
+%
+% \DescribeMacro{\ihrenachricht} Datum der Nachricht des Empfängers
+%
+% \DescribeMacro{\unserzeichen} eigenes Zeichen
+%
 % \subsubsection{Sonstiges}
 %
 % \DescribeMacro{\datum} Datum des Schreibens (standarmäßig |\today|)
@@ -318,8 +341,6 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 %
 % \section{Implementierung}
 %    \begin{macrocode}
-\NeedsTeXFormat{LaTeX2e}[2009/09/24]
-\ProvidesClass{gbn}[2011/12/12 v0.1 g-brief-new (gbn)]
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{family=GBN,prefix=GBN@}
 \DeclareStringOption[0 mm]{subjectsep}
@@ -334,7 +355,7 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 \LoadClass[11pt, a4paper]{article}
 
-% Verwendete Packete
+% Verwendete Pakete
 \RequirePackage[texcoord]{eso-pic}
 \RequirePackage{microtype}
 \RequirePackage{xcolor}
@@ -345,15 +366,15 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \RequirePackage[ngerman]{babel}
 \fi
 \RequirePackage[utf8]{inputenc}
-\RequirePackage{setspace}
+\RequirePackage{ragged2e}
+\RequirePackage{tabularx}
 \RequirePackage{hyperref}
-\definecolor{MyDarkBlue}{rgb}{0,0.08,0.35}
 \hypersetup{
   raiselinks=false,
   colorlinks=true,
   linkcolor=black,
   citecolor=black,
-  urlcolor=MyDarkBlue,
+  urlcolor=GBN@accent,
   linkbordercolor=0 0 0,
   citebordercolor=0 0 0,
   urlbordercolor=0 0 0,
@@ -365,16 +386,23 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 % Allgemeines Layout
 
+% Schrift: Source Sans 3, falls installiert, sonst TeX Gyre Heros. Eine andere
+% Schrift kann in der Präambel mit \setmainfont gesetzt werden.
 \RequirePackage{fontspec}
-\setmainfont[Ligatures=TeX,Scale=1.0]{Open Sans}
-\setmonofont[Ligatures=TeX,Scale=1.1]{Ubuntu Mono}
-\linespread{1.25}
+\IfFontExistsTF{Source Sans 3}
+  {\setmainfont{Source Sans 3}}
+  {\ClassWarningNoLine{gbn}{Font 'Source Sans 3' not found,
+     using 'TeX Gyre Heros'}%
+   \setmainfont{TeX Gyre Heros}}
+\linespread{1.15}
 
 \setlength{\oddsidemargin}{25mm - 1in}
 \setlength{\textwidth}{165mm}
 \setlength{\topmargin}{0mm}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.85\baselineskip}
+\setlength{\parskip}{8pt plus 2pt}
+% Flattersatz (DIN 5008)
+\RaggedRight
 
 \AtEndOfClass{\pagestyle{regularpage}}
 
@@ -389,11 +417,10 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \GBN@len{GBN@paperWidth}     {210.00mm}
 
 % Längen auf der ersten Seite
-\GBN@len{GBN@fHeadX}         {  20.00mm} % xoffset Kopfzeile
-\GBN@len{GBN@fHeadWidth}     { 170.00mm} % Breite Kopfzeile
+\GBN@len{GBN@fHeadX}         {  25.00mm} % xoffset Kopfzeile
 \GBN@len{GBN@fHeadHeight}    {  25.00mm} % Höhe Kopfzeile
-\GBN@len{GBN@fHeadLineX}     {  20.00mm} % xoffset Kopfzeilenlinie
-\GBN@len{GBN@fHeadLineWidth} { 170.00mm} % Breite (Länge) Kopfzeilenlinie
+\GBN@len{GBN@fHeadLineX}     {  25.00mm} % xoffset Kopfzeilenlinie
+\GBN@len{GBN@fHeadLineWidth} { 165.00mm} % Breite (Länge) Kopfzeilenlinie
 \GBN@len{GBN@fHeadSep}       {   8.00mm} % Zwischenraum zwischen Kopf und Text
 \GBN@len{GBN@fFootSep}       {   4.00mm} % Zwischenraum zwischen Text und Fuss
 \GBN@len{GBN@fFootLineX}     {  25.00mm} % xoffset Fusszeilenlinie
@@ -402,20 +429,17 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \GBN@len{GBN@fFootWidth}     { 165.00mm} % Breite Fusszeile
 \GBN@len{GBN@fFootHeight}    {  30.00mm} % Höhe Fusszeile
 
-\GBN@len{GBN@windowTop}      {  -27.0mm} % yoffset der Fenstermarken oben
+\GBN@len{GBN@windowTop}      {  -27.0mm} % yoffset Anschriftfeld oben
 \GBN@len{GBN@extrasY}        {  -32.0mm} % yoffset der Zusatz- und Vermerkzone
 \GBN@len{GBN@addressY}       {  -44.7mm} % yoffset der Adresse
-\GBN@len{GBN@windowBottom}   {  -72.0mm} % yoffset der Fenstermarken unten
+\GBN@len{GBN@windowBottom}   {  -72.0mm} % yoffset Anschriftfeld unten
+\GBN@len{GBN@infoX}          { 125.00mm} % xoffset Informationsblock
 \GBN@len{GBN@faltmarkeTop}   {  -87.0mm} % yoffset der Faltmarke oben
-\GBN@len{GBN@lochmarke}      { -148.0mm} % yoffset der Faltmarke unten
+\GBN@len{GBN@lochmarke}      { -148.5mm} % yoffset der Lochmarke
 \GBN@len{GBN@faltmarkeBottom}{ -192.0mm} % yoffset der Faltmarke unten
 
 % Längen auf regulären Seiten
-\GBN@len{GBN@rHeadX}         {  25.00mm} % xoffset Kopfzeile
-\GBN@len{GBN@rHeadWidth}     { 165.00mm} % Breite Kopfzeile
 \GBN@len{GBN@rHeadHeight}    {  15.00mm} % Höhe Kopfzeile
-\GBN@len{GBN@rHeadLineX}     {  25.00mm} % xoffset Kopfzeilenlinie
-\GBN@len{GBN@rHeadLineWidth} { 165.00mm} % Breite (Länge) Kopfzeilenlinie
 \GBN@len{GBN@rHeadSep}       {   0.00mm} % Zwischenraum zwischen Kopf und Text
 \GBN@len{GBN@rFootSep}       {   4.00mm} % Zwischenraum zwischen Text und Fuss
 \GBN@len{GBN@rFootLineX}     {  25.00mm} % xoffset Fusszeilenlinie
@@ -428,28 +452,39 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
   \setlength{\GBN@fHeadHeight}   {  20.00mm} % Höhe Kopfzeile
 \fi
 
-% Eigner |lastpage| counter, wenn die Option |gbnlastpage| gesetzt ist
+% Abgeleitete Positionen
+\GBN@len{GBN@fHeadNameY}  {8mm - \GBN@fHeadHeight}
+\GBN@len{GBN@fHeadLineY}  {-\GBN@fHeadHeight}
+\GBN@len{GBN@infoWidth}   {\GBN@fFootX + \GBN@fFootWidth - \GBN@infoX}
+\GBN@len{GBN@retourY}     {\GBN@windowTop - 3.5mm}
+\GBN@len{GBN@addressBaseY}{\GBN@addressY - 3.5mm} % Grundlinie erste Anschriftzeile
+\GBN@len{GBN@fFootY}      {\GBN@fFootHeight - \GBN@paperHeight - 6mm}
+\GBN@len{GBN@fFootLineY}  {\GBN@fFootHeight - \GBN@paperHeight}
+\GBN@len{GBN@footColWidth}{\GBN@fFootWidth / 3}
+\GBN@len{GBN@rFootY}      {\GBN@rFootHeight / 2 - \GBN@paperHeight}
+\GBN@len{GBN@rFootLineY}  {\GBN@rFootHeight - \GBN@paperHeight}
+
+\newsavebox{\GBN@box}
+
+% Gesamtzahl der Seiten: wird am Ende des Laufs in die aux-Datei geschrieben
+% (zweiter Lauf nötig). Mit Option |gbnlastpage| gilt der Zähler gbnlastpage.
+\def\GBN@totalPages{0}
+\AddToHook{enddocument/afterlastpage}{%
+  \immediate\write\@auxout{%
+    \gdef\string\GBN@totalPages{\the\ReadonlyShipoutCounter}}}
 \ifGBN@gbnlastpage
   \newcounter{gbnlastpage}
   \setcounter{gbnlastpage}{1}
+  \def\GBN@total{\arabic{gbnlastpage}}
+\else
+  \def\GBN@total{\GBN@totalPages}
 \fi
 
-% Farben
-\definecolor{GBN@lineColor}{rgb}{0.6,0.6,0.6}
-\newcommand*\linecolor[1]{\definecolor{GBN@lineColor}{rgb}{#1}}
-\newcommand*\GBN@inLineColor[1]{\textcolor{GBN@lineColor}{#1}}
-\definecolor{GBN@ruleColor}{rgb}{0.9,0.9,0.9}
-\newcommand*\rulecolor[1]{\definecolor{GBN@ruleColor}{rgb}{#1}}
-\newcommand*\GBN@inRuleColor[1]{\textcolor{GBN@ruleColor}{#1}}
-\definecolor{GBN@headerColor}{rgb}{0.7,0.7,0.7}
-\newcommand*\headercolor[1]{\definecolor{GBN@headerColor}{rgb}{#1}}
-\newcommand*\GBN@inHeaderColor[1]{\textcolor{GBN@headerColor}{#1}}
-\definecolor{GBN@footerColor}{rgb}{0.4,0.4,0.4}
-\newcommand*\footercolor[1]{\definecolor{GBN@footerColor}{rgb}{#1}}
-\newcommand*\GBN@inFooterColor[1]{\textcolor{GBN@footerColor}{#1}}
-\definecolor{GBN@retourColor}{rgb}{0.2,0.2,0.2}
-\newcommand*\retourcolor[1]{\definecolor{GBN@retourColor}{rgb}{#1}}
-\newcommand*\GBN@inRetourColor[1]{\textcolor{GBN@retourColor}{#1}}
+% Farben (HTML-Hex-Werte)
+\definecolor{GBN@accent}{HTML}{1F3A5F}
+\newcommand*\accentcolor[1]{\definecolor{GBN@accent}{HTML}{#1}}
+\definecolor{GBN@muted}{HTML}{767676}
+\newcommand*\mutedcolor[1]{\definecolor{GBN@muted}{HTML}{#1}}
 
 % Auszeichnende Texte
 \newcommand*{\GBN@def}[3]{%
@@ -458,15 +493,21 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
     \expandafter\def\csname #2\endcsname{##1}}%
 }
 
-\GBN@def{telefontext}{GBN@telefonText}{Telefon:}
-\GBN@def{telefaxtext}{GBN@telefaxText}{Telefax:}
-\GBN@def{emailtext}{GBN@emailText}{E-Mail:}
-\GBN@def{httptext}{GBN@httpText}{HTTP:}
-\GBN@def{banktext}{GBN@bankText}{Bankverbindung:}
-\GBN@def{blztext}{GBN@blzText}{BLZ:}
-\GBN@def{kontotext}{GBN@kontoText}{Konto:}
-\GBN@def{ibantext}{GBN@ibanText}{IBAN:}
-\GBN@def{bictext}{GBN@bicText}{BIC:}
+\GBN@def{telefontext}{GBN@telefonText}{Telefon}
+\GBN@def{telefaxtext}{GBN@telefaxText}{Telefax}
+\GBN@def{emailtext}{GBN@emailText}{E-Mail}
+\GBN@def{httptext}{GBN@httpText}{Web}
+\GBN@def{banktext}{GBN@bankText}{Bankverbindung}
+\GBN@def{ibantext}{GBN@ibanText}{IBAN}
+\GBN@def{bictext}{GBN@bicText}{BIC}
+\GBN@def{anschrifttext}{GBN@anschriftText}{Anschrift}
+\GBN@def{kontakttext}{GBN@kontaktText}{Kontakt}
+\GBN@def{ihrzeichentext}{GBN@ihrZeichenText}{Ihr Zeichen}
+\GBN@def{ihrenachrichttext}{GBN@ihreNachrichtText}{Ihre Nachricht vom}
+\GBN@def{unserzeichentext}{GBN@unserZeichenText}{Unser Zeichen}
+\GBN@def{datumtext}{GBN@datumText}{Datum}
+\GBN@def{seitetext}{GBN@seiteText}{Seite}
+\GBN@def{vontext}{GBN@vonText}{von}
 
 % Header-Informationen
 \GBN@def{headername}{GBN@headerName}{}
@@ -482,8 +523,6 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \GBN@def{fromemail}{GBN@fromEMail}{}
 \GBN@def{fromhttp}{GBN@fromHTTP}{}
 \GBN@def{frombank}{GBN@fromBank}{}
-\GBN@def{fromblz}{GBN@fromBLZ}{}
-\GBN@def{fromkonto}{GBN@fromKonto}{}
 \GBN@def{fromiban}{GBN@fromIBAN}{}
 \GBN@def{frombic}{GBN@fromBIC}{}
 
@@ -501,6 +540,10 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \GBN@def{toplzort}{GBN@toPlzOrt}{}
 \GBN@def{toland}{GBN@toLand}{}
 
+% Informationsblock:
+\GBN@def{ihrzeichen}{GBN@ihrZeichen}{}
+\GBN@def{ihrenachricht}{GBN@ihreNachricht}{}
+\GBN@def{unserzeichen}{GBN@unserZeichen}{}
 
 % Sonstiges:
 \GBN@def{datum}{GBN@datum}{\today}
@@ -512,371 +555,165 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \GBN@def{signatur}{GBN@signatur}{}
 \GBN@def{anlagen}{GBN@anlagen}{}
 
+% Bausteine
+\newcommand*\GBN@senderName{%
+  \ifx\GBN@fromTitel\empty\else\GBN@fromTitel~\fi\GBN@fromName}
+\newcommand*\GBN@label[1]{\textcolor{GBN@muted}{#1}}
+\newcommand*\GBN@tabularNums{\addfontfeatures{Numbers={Lining,Monospaced}}}
+\newcommand*\GBN@rule[1]{\textcolor{GBN@muted!40}{\rule{#1}{0.4pt}}}
 
-% erste Steite
+% Name im Kopf: gesperrte Versalien in der Akzentfarbe
+\newcommand*\GBN@headName{{%
+  \color{GBN@accent}\fontsize{15}{18}\selectfont
+  \addfontfeatures{LetterSpace=8}%
+  \MakeUppercase{%
+    \ifx\GBN@headerName\empty\GBN@fromName\else\GBN@headerName\fi}}}
+
+% Informationsblock (DIN 5008): Bezugszeichen, Datum, ggf. Seitenzahl.
+% Feste Breite bis zum rechten Textrand; lange Werte werden umbrochen.
+\newcommand*\GBN@infoRow[2]{\ifx#2\empty\else\GBN@label{#1}&#2\\\fi}
+\newcommand*\GBN@infoBlock{{%
+  \small\GBN@tabularNums
+  \setlength\tabcolsep{0pt}%
+  \renewcommand\arraystretch{1.1}%
+  \begin{tabularx}{\GBN@infoWidth}[t]{l@{\hspace{4mm}}>{\RaggedRight\arraybackslash}X}%
+    \GBN@infoRow{\GBN@ihrZeichenText}{\GBN@ihrZeichen}%
+    \GBN@infoRow{\GBN@ihreNachrichtText}{\GBN@ihreNachricht}%
+    \GBN@infoRow{\GBN@unserZeichenText}{\GBN@unserZeichen}%
+    \GBN@label{\GBN@datumText}&\GBN@datum\\%
+    \ifnum\GBN@total>1
+      \GBN@label{\GBN@seiteText}&\thepage\ \GBN@vonText\ \GBN@total\\%
+    \fi
+  \end{tabularx}}}
+
+% Fußzeile: drei gleich breite Spalten mit Überschrift; leere Spalten
+% bleiben leer.
+\newcommand*\GBN@line[1]{\ifx#1\empty\else#1\par\fi}
+\newcommand*\GBN@footPair[2]{\ifx#2\empty\else\GBN@label{#1}\enspace#2\par\fi}
+\newcommand\GBN@footCol[2]{%
+  \sbox\GBN@box{\parbox[t]{\GBN@footColWidth}{#2}}%
+  \parbox[t]{\GBN@footColWidth}{\RaggedRight
+    \ifdim\dimexpr\ht\GBN@box+\dp\GBN@box\relax>\z@
+      {\GBN@label{\scriptsize\addfontfeatures{LetterSpace=6}\MakeUppercase{#1}}}%
+      \par\vspace{0.8mm}#2%
+    \fi}}
+\newcommand*\GBN@footer{{%
+  \footnotesize\GBN@tabularNums
+  \GBN@footCol{\GBN@anschriftText}{%
+    \GBN@line{\GBN@fromName}%
+    \GBN@line{\GBN@fromStrasseHaus}%
+    \GBN@line{\GBN@fromPlzOrt}%
+    \GBN@line{\GBN@fromLand}}%
+  \GBN@footCol{\GBN@kontaktText}{%
+    \GBN@footPair{\GBN@telefonText}{\GBN@fromTelefon}%
+    \GBN@footPair{\GBN@telefaxText}{\GBN@fromTelefax}%
+    \GBN@line{\GBN@fromEMail}%
+    \GBN@line{\GBN@fromHTTP}}%
+  \GBN@footCol{\GBN@bankText}{%
+    \GBN@line{\GBN@fromBank}%
+    \GBN@footPair{\GBN@ibanText}{\GBN@fromIBAN}%
+    \GBN@footPair{\GBN@bicText}{\GBN@fromBIC}}}}
+
+% Alle festen Elemente der ersten Seite
+\newcommand*\GBN@firstPage{%
+  \setlength\unitlength{1mm}%
+  %
+  % Kopfzeile
+  \put(\LenToUnit\GBN@fHeadX, \LenToUnit\GBN@fHeadNameY){\GBN@headName}%
+  \ifGBN@rules
+    \put(\LenToUnit\GBN@fHeadLineX, \LenToUnit\GBN@fHeadLineY){%
+      \GBN@rule{\GBN@fHeadLineWidth}}%
+  \fi
+  %
+  % Rücksendeangabe; wird auf die Breite des Anschriftfelds (bis 105 mm)
+  % verkleinert, falls nötig
+  \sbox\GBN@box{\scriptsize\color{GBN@muted}%
+      \GBN@senderName\ \textperiodcentered\ %
+      \GBN@fromStrasseHaus\ \textperiodcentered\ %
+      \GBN@fromPlzOrt}%
+  \ifdim\wd\GBN@box>80mm
+    \sbox\GBN@box{\resizebox{80mm}{!}{\usebox\GBN@box}}%
+  \fi
+  \put(25, \LenToUnit\GBN@retourY){\usebox\GBN@box}%
+  %
+  % Zusatz- und Vermerkzone
+  \put(25, \LenToUnit\GBN@extrasY){%
+    \parbox[t][12.7mm]{78mm}{%
+      \vfill
+      \parbox{78mm}{\scriptsize
+        \ifx\GBN@zvzThree\empty ~\else\GBN@zvzThree\fi\\%
+        \ifx\GBN@zvzTwo\empty ~\else\GBN@zvzTwo\fi\\%
+        \GBN@zvzOne}%
+      \vfill}}%
+  %
+  % Anschrift
+  % Von oben gefüllt (DIN 5008), leere Zeilen entfallen. [t]: der
+  % Bezugspunkt ist die Grundlinie der ersten Zeile. Zeilenabstand 12.6pt
+  % (4.45 mm), damit sechs Zeilen in die Anschriftzone (bis 72 mm) passen.
+  \put(25, \LenToUnit\GBN@addressBaseY){%
+    \parbox[t]{78mm}{\linespread{1}\fontsize{11}{12.6pt}\selectfont
+      \GBN@line{\GBN@toFirma}%
+      \GBN@line{\GBN@toAnrede}%
+      \ifx\GBN@toName\empty\else
+        \ifx\GBN@toTitel\empty\else\GBN@toTitel~\fi\GBN@toName\par
+      \fi
+      \GBN@line{\GBN@toStrasseHaus}%
+      \GBN@line{\GBN@toPlzOrt}%
+      \GBN@line{\GBN@toLand}}}%
+  %
+  % Informationsblock: erste Zeile auf der Grundlinie der Rücksendeangabe
+  \put(\LenToUnit\GBN@infoX, \LenToUnit\GBN@retourY){\GBN@infoBlock}%
+  %
+  % Falz- und Lochmarken
+  {\color{GBN@muted}\linethickness{0.3pt}%
+    \put(0, \LenToUnit\GBN@faltmarkeTop){\line(1,0){3}}%
+    \put(0, \LenToUnit\GBN@lochmarke){\line(1,0){5}}%
+    \put(0, \LenToUnit\GBN@faltmarkeBottom){\line(1,0){3}}}%
+  %
+  % Fußzeile
+  \put(\LenToUnit\GBN@fFootX, \LenToUnit\GBN@fFootY){\GBN@footer}%
+  \ifGBN@rules
+    \put(\LenToUnit\GBN@fFootLineX, \LenToUnit\GBN@fFootLineY){%
+      \GBN@rule{\GBN@fFootLineWidth}}%
+  \fi
+  \ifGBN@rulers\rulers{20}{-297}\fi}
+
+% Feste Elemente der regulären Seiten
+\newcommand*\GBN@regularPage{%
+  \setlength\unitlength{1mm}%
+  \ifnum\GBN@total>1
+    \put(\LenToUnit{(\GBN@rFootX + \GBN@rFootWidth)}, \LenToUnit\GBN@rFootY){%
+      \makebox(0,0)[r]{\footnotesize\GBN@tabularNums\GBN@label{%
+          \GBN@seiteText\ \thepage\ \GBN@vonText\ \GBN@total}}}%
+  \fi
+  \ifGBN@rules
+    \put(\LenToUnit\GBN@rFootLineX, \LenToUnit\GBN@rFootLineY){%
+      \GBN@rule{\GBN@rFootLineWidth}}%
+  \fi}
+
+% erste Seite
 \def\ps@first{%
-  \setlength{\headsep}{-\GBN@windowBottom - 1.2in + \GBN@fHeadSep}
-  %
-  % Kopf (ungerade Seite)
-  \def\@oddhead{%
-    \AddToShipoutPicture*{%
-      \setlength\unitlength{1mm}%
-      \setlength\tabcolsep{0pt}%
-      \setlength\fboxsep{0pt}
-      %
-      % Kopfzeile
-      \newsavebox{\GBN@fHeadBox}%
-      \sbox{\GBN@fHeadBox}{%
-        \parbox{\GBN@fHeadWidth}{\GBN@inHeaderColor{%
-            \ifx\GBN@headerName\empty%
-              \Large\textbf{\GBN@fromName}%
-            \else%
-              \Large\textbf{\GBN@headerName}%
-            \fi%
-            \hfill%
-            \normalsize\begin{tabular}{r}%
-            \GBN@fromStrasseHaus\\%
-            \GBN@fromPlzOrt%
-            \end{tabular}%
-        }}%
-      }%
-      \newlength{\GBN@fHeadYOffset}%
-      \setlength{\GBN@fHeadYOffset}{%
-        \GBN@fHeadHeight / 2 %
-        + \depthof{\usebox{\GBN@fHeadBox}} / 2 %
-        - \heightof{\usebox{\GBN@fHeadBox}} / 2 %
-        - \GBN@fHeadHeight}%
-      \put(\LenToUnit\GBN@fHeadX, \LenToUnit\GBN@fHeadYOffset){%
-        \usebox{\GBN@fHeadBox}}%
-      %
-      % Linie unter Kopfzeile
-      \ifGBN@rules%
-        \newlength{\GBN@fHeadLineYOffset}%
-        \setlength{\GBN@fHeadLineYOffset}{-\GBN@fHeadHeight}%
-        \put(\LenToUnit\GBN@fHeadLineX, \LenToUnit\GBN@fHeadLineYOffset){%
-          \GBN@inRuleColor{\line(  1, 0){\LenToUnit\GBN@fHeadLineWidth}}}%
-      \fi%
-      %
-      % Fenstermarken
-      \put( 20, \LenToUnit\GBN@windowTop){% oben links horizontal
-        \GBN@inLineColor{\line(  1, 0){  1}}}
-      \put( 20, \LenToUnit\GBN@windowTop){% oben links vertikal
-        \GBN@inLineColor{\line(  0,-1){  1}}}
-      \put(105, \LenToUnit\GBN@windowTop){% oben rechts horizontal
-        \GBN@inLineColor{\line( -1, 0){  1}}}
-      \put(105, \LenToUnit\GBN@windowTop){% oben rechts vertikal
-        \GBN@inLineColor{\line(  0,-1){  1}}}
-      \put( 20, \LenToUnit\GBN@windowBottom){% unten links horizontal
-        \GBN@inLineColor{\line(  1, 0){  1}}}
-      \put( 20, \LenToUnit\GBN@windowBottom){% unten links vertikal
-        \GBN@inLineColor{\line(  0, 1){  1}}}
-      \put(105, \LenToUnit\GBN@windowBottom){% unten rechts horizontal
-        \GBN@inLineColor{\line( -1, 0){  1}}}
-      \put(105, \LenToUnit\GBN@windowBottom){% unten rechts vertikal
-        \GBN@inLineColor{\line(  0, 1){  1}}}
-      %
-      % Absender
-      \put( 25, \LenToUnit\GBN@windowTop){\parbox[t][5mm]{78mm}{%
-          \vfill%
-          \centering\GBN@inRetourColor{\scriptsize%
-            \GBN@fromTitel\,\,\GBN@fromName\ %
-            $\cdot$\ %
-            \GBN@fromStrasseHaus\ %
-            $\cdot$\ %
-            \GBN@fromPlzOrt%
-          }%
-          \vfill%
-        }}%
-      \newlength{\GBN@windowRuleY}%
-      \setlength{\GBN@windowRuleY}{\GBN@windowTop-5mm}%
-      \put( 25, \LenToUnit\GBN@windowRuleY){%
-        \GBN@inLineColor{\line(  1, 0){ 78}}}%
-      %
-      % Zusatz- und Vermerkzone
-      \put( 25, \LenToUnit\GBN@extrasY){%
-        %\fbox{%
-          \parbox[t][12.7mm]{78mm}{%
-            \vfill%
-            \parbox{78mm}{\scriptsize%
-              \ifx \GBN@zvzThree\empty ~ \else \GBN@zvzThree \fi\\%
-              \ifx \GBN@zvzTwo\empty ~ \else \GBN@zvzThree \fi\\%
-              \GBN@zvzOne%
-            }%
-            \vfill%
-          }%
-        %}%
-      }%
-      % Adresse
-      \newlength{\GBN@addressHeight}%
-      \setlength{\GBN@addressHeight}{\GBN@addressY - \GBN@windowBottom}%
-      \put( 25, \LenToUnit\GBN@addressY){%
-          \parbox[t][\GBN@addressHeight]{78mm}{\normalsize%
-            \vfill%
-            \parbox{78mm}{%
-              \setstretch{1.15}%
-              % without empty lines
-              \ifx \GBN@toFirma\empty\else\GBN@toFirma\\\fi%
-              \ifx \GBN@toAnrede\empty\else\GBN@toAnrede\\\fi%
-              \ifx \GBN@toTitel\empty%
-                \ifx \GBN@toName\empty%
-                \else \GBN@toName\\\fi%
-              \else%
-                \GBN@toTitel\,\GBN@toName\\%
-              \fi%
-              \ifx \GBN@toStrasseHaus\empty ~ \else \GBN@toStrasseHaus \fi\\%
-              \ifx \GBN@toPlzOrt\empty ~ \else \GBN@toPlzOrt \fi\\%
-              \ifx \GBN@toLand\empty ~ \else \GBN@toLand \fi%
-              %* with empty lines
-              %
-              % \ifx \GBN@toFirma\empty ~ \else \GBN@toFirma \fi\\%
-              % \ifx \GBN@toAnrede\empty ~ \else \GBN@toAnrede \fi\\%
-              % \ifx \GBN@toTitel\empty%
-              %   \ifx \GBN@toName\empty ~ %
-              %   \else \GBN@toName %
-              %   \fi\\%
-              % \else%
-              %   \GBN@toTitel\,\GBN@toName\\%
-              % \fi%
-              % \ifx \GBN@toStrasseHaus\empty ~ \else \GBN@toStrasseHaus \fi\\%
-              % \ifx \GBN@toPlzOrt\empty ~ \else \GBN@toPlzOrt \fi\\%
-              % \ifx \GBN@toLand\empty ~ \else \GBN@toLand \fi%
-              %              
-            }%
-            \vfill%
-          }%
-      }
-      \put( 0, \LenToUnit\GBN@faltmarkeTop){% Faltmarke oben
-        \GBN@inLineColor{\line(  1, 0){  5}}}%
-      \put( 0, \LenToUnit\GBN@lochmarke){% Lochermarke oben
-        \GBN@inLineColor{\line(  1, 0){  7}}}%
-      \put( 0, \LenToUnit\GBN@faltmarkeBottom){% Faltmarke unten
-        \GBN@inLineColor{\line(  1, 0){  5}}}%
-      \ifGBN@rulers
-      \rulers{20}{-297}
-      \fi
-    }%
-  }
-  %
-  % Kopf (gerade Seite)
-  \def\@evenhead{\@oddhead}
-  %
-  % Fuß (ungerade Seite)
-  \def\@oddfoot{
-    \AddToShipoutPicture*{%
-      \setlength\unitlength{1mm}
-      \setlength\tabcolsep{0pt}
-      \setlength\fboxsep{0pt}
-      \newsavebox{\GBN@fFootBox}%
-      \sbox{\GBN@fFootBox}{%
-        \parbox{\GBN@fFootWidth}{\footnotesize\GBN@inFooterColor{%
-            %
-            % left side
-            \newsavebox{\GBN@fLeftFootBox}%
-            \sbox{\GBN@fLeftFootBox}{%
-              \footnotesize%
-              \begin{tabular}{lll}%
-                \ifx\GBN@fromTelefon\@empty%
-                \else
-                \GBN@telefonText & ~ & \GBN@fromTelefon \smallskip\\%
-                \fi%
-                \ifx\GBN@fromTelefax\@empty%
-                \else
-                \GBN@telefaxText && \GBN@fromTelefax \smallskip\\%
-                \fi%
-                \ifx\GBN@fromEMail\@empty%
-                \else%
-                \hspace*{0.1em}\GBN@emailText && \smallskip\GBN@fromEMail \\%
-                \fi%
-                \ifx\GBN@fromHTTP\@empty%
-                \else
-                \hspace*{0.1em}\GBN@httpText && \GBN@fromHTTP%
-                \fi%
-              \end{tabular}%
-            }%
-            \newlength{\GBN@fLeftFootBoxWidth}%
-            \setlength{\GBN@fLeftFootBoxWidth}{%
-              \widthof{\usebox{\GBN@fLeftFootBox}}}%
-            %
-            % center
-            \newsavebox{\GBN@fCenterFootBox}%
-            \sbox{\GBN@fCenterFootBox}{%
-              \footnotesize%
-              \begin{tabular}{c}%
-			    \ifGBN@gbnlastpage%
-				  --\,\thepage/\arabic{gbnlastpage}\,--%
-				\else%
-                  --\,\thepage/\lastpageref*{LastPage}\,--%
-				\fi%
-              \end{tabular}%
-            }%
-            \newlength{\GBN@fCenterFootBoxWidth}%
-            \setlength{\GBN@fCenterFootBoxWidth}{%
-              \widthof{\usebox{\GBN@fCenterFootBox}}}%
-            %
-            % right side
-            \newsavebox{\GBN@fRightFootBox}%
-            \sbox{\GBN@fRightFootBox}{%
-              \footnotesize%
-              \begin{tabular}{lll}%
-                \ifx \GBN@fromIBAN\empty%
-                  %
-                  % BLZ + KTO
-                  %
-                  % Nur wenn Bankname, BLZ und KTO gesetzt sind
-                  \ifx \GBN@fromBank\empty%
-                  \else%
-                    \ifx \GBN@fromBLZ\empty%
-                    \else%
-                      \ifx \GBN@formKonto\empty%
-                      \else%
-                        \GBN@bankText & ~ & \GBN@fromBank\smallskip\\%
-                        && \GBN@blzText \space \GBN@fromBLZ\smallskip\\%
-                        && \GBN@kontoText \space \GBN@fromKonto\\%
-                      \fi%
-                    \fi%
-                  \fi%
-                \else%
-                  %
-                  % IBAN + BIC
-                  %
-                  % Nur wenn mindestens IBAN gesetzt ist
-                  && \GBN@bankText\smallskip\\%
-                  && \GBN@ibanText \space \GBN@fromIBAN\smallskip\\%
-                  \ifx \GBN@fromBIC\empty%
-                  \else%
-                    && \GBN@bicText \space \GBN@fromBIC\\%
-                  \fi%
-                \fi
-              \end{tabular}%
-            }%
-            \newlength{\GBN@fRightFootBoxWidth}%
-            \setlength{\GBN@fRightFootBoxWidth}{%
-              \widthof{\usebox{\GBN@fRightFootBox}}%
-            }%
-            \newlength{\GBN@fSpaceLeft}%
-            \setlength{\GBN@fSpaceLeft}{%
-              \GBN@fFootWidth / 2 %
-              - \GBN@fCenterFootBoxWidth / 2 %
-              - \GBN@fLeftFootBoxWidth}%
-            \newlength{\GBN@fSpaceRight}%
-            \setlength{\GBN@fSpaceRight}{%
-              \GBN@fFootWidth / 2 %
-              - \GBN@fCenterFootBoxWidth / 2 %
-              - \GBN@fRightFootBoxWidth}%
-            \raisebox{%
-              \depthof{\usebox{\GBN@fLeftFootBox}} %
-              - \totalheightof{\usebox{\GBN@fLeftFootBox}}}%
-                     {\usebox{\GBN@fLeftFootBox}}%
-            \hspace*{\GBN@fSpaceLeft}%
-            \raisebox{%
-              \depthof{\usebox{\GBN@fCenterFootBox}} %
-              - \totalheightof{\usebox{\GBN@fCenterFootBox}}}%
-                     {\usebox{\GBN@fCenterFootBox}}%
-            \hspace*{\GBN@fSpaceRight}%
-            \raisebox{%
-              \depthof{\usebox{\GBN@fRightFootBox}} %
-              - \totalheightof{\usebox{\GBN@fRightFootBox}}}%
-                     {\usebox{\GBN@fRightFootBox}}%
-        }}%
-      }%
-      \newlength{\GBN@fFootYOffset}%
-      \setlength{\GBN@fFootYOffset}{%
-        \GBN@fFootHeight / 2 %
-        + \depthof{\usebox{\GBN@fFootBox}} / 2 %
-        - \heightof{\usebox{\GBN@fFootBox}} / 2 %
-        - \GBN@paperHeight}
-      \put(\LenToUnit\GBN@fFootX, \LenToUnit\GBN@fFootYOffset){%
-        \usebox{\GBN@fFootBox}}%
-      % Linie über Fußzeile
-      \ifGBN@rules%
-        \newlength{\GBN@fFootLineYOffset}%
-        \setlength{\GBN@fFootLineYOffset}{\GBN@fFootHeight - \GBN@paperHeight}%
-        \put(\LenToUnit\GBN@fFootLineX, \LenToUnit\GBN@fFootLineYOffset){%
-          \GBN@inRuleColor{\line(  1, 0){\LenToUnit\GBN@fFootLineWidth}}}%
-      \fi
-    }
-  }
-  %
-  % Fuß (gerade Seite)
-  \def\@evenfoot{\@oddfoot}
-}
-
-
-
-% Längen und Boxen für reguläre Seite(n)
-\newsavebox{\GBN@rFootBox}
-\newsavebox{\GBN@rCenterFootBox}
-\newlength{\GBN@rSpaceLeft}
-\newlength{\GBN@rFootYOffset}
-\newlength{\GBN@rFootLineYOffset}
+  \setlength{\headsep}{-\GBN@windowBottom - 1.2in + \GBN@fHeadSep}%
+  \def\@oddhead{\AddToShipoutPicture*{\GBN@firstPage}}%
+  \let\@evenhead\@oddhead
+  \def\@oddfoot{}%
+  \let\@evenfoot\@oddfoot}
 
 % reguläre Seite
-\def\ps@regularpage{
-  \setlength{\headsep}{\GBN@rHeadHeight - 1.2in + \GBN@rHeadSep}
-  %
-  % Kopf (ungerade Seite)
-  \def\@oddhead{}
-  %
-  % Kopf (gerade Seite)
-  \def\@evenhead{\@oddhead}
-  %
-  % Fuß (ungerade Seite)
-  \def\@oddfoot{
-    \AddToShipoutPicture*{
-      \setlength\unitlength{1mm}
-      \setlength\tabcolsep{0pt}
-      \setlength\fboxsep{0pt}
-      \sbox{\GBN@rFootBox}{
-        \parbox{\GBN@rFootWidth}{\footnotesize\GBN@inFooterColor{
-            %
-            % center
-            \sbox{\GBN@rCenterFootBox}{
-              \footnotesize
-			  \ifGBN@gbnlastpage%
-				 --\,\thepage/\arabic{gbnlastpage}\,--%
-			  \else%
-                --\,\thepage/\lastpageref*{LastPage}\,--%
-			  \fi%
-            }
-            %
-            \setlength\GBN@rSpaceLeft{%
-              \GBN@rFootWidth / 2 %
-              - \widthof{\usebox{\GBN@rCenterFootBox}} / 2}%
-            \hspace*{\GBN@rSpaceLeft}%
-            \usebox{\GBN@rCenterFootBox}%
-        }}
-      }
-      \setlength{\GBN@rFootYOffset}{%
-        \GBN@rFootHeight / 2 %
-        + \depthof{\usebox{\GBN@rFootBox}} / 2 %
-        - \heightof{\usebox{\GBN@rFootBox}} / 2 %
-        - \GBN@paperHeight}
-      \put(\LenToUnit\GBN@rFootX, \LenToUnit\GBN@rFootYOffset){
-        \usebox{\GBN@rFootBox}}
-      %
-      % Linie unter Kopfzeile
-      \ifGBN@rules
-        \setlength{\GBN@rFootLineYOffset}{%
-          \GBN@rFootHeight %
-          - \GBN@paperHeight}
-        \put(\LenToUnit\GBN@rFootLineX, \LenToUnit\GBN@rFootLineYOffset){%
-          \GBN@inRuleColor{\line(  1, 0){\LenToUnit\GBN@rFootLineWidth}}}
-      \fi
-    }
-  }
-  %
-  % Fuß (gerade Seite)
-  \def\@evenfoot{\@oddfoot}
-}
+\def\ps@regularpage{%
+  \setlength{\headsep}{\GBN@rHeadHeight - 1.2in + \GBN@rHeadSep}%
+  \def\@oddhead{}%
+  \let\@evenhead\@oddhead
+  \def\@oddfoot{\AddToShipoutPicture*{\GBN@regularPage}}%
+  \let\@evenfoot\@oddfoot}
 
 % Seiten ohne Kopf oder Fuß
-\def\ps@empty{
-  \setlength{\headsep}{\GBN@rHeadHeight - 1.2in + \GBN@rHeadSep}
-  \def\@oddhead{}
-  \def\@evenhead{}
-  \def\@oddfoot{}
-  \def\@evenfoot{}
-}
+\def\ps@empty{%
+  \setlength{\headsep}{\GBN@rHeadHeight - 1.2in + \GBN@rHeadSep}%
+  \def\@oddhead{}%
+  \def\@evenhead{}%
+  \def\@oddfoot{}%
+  \def\@evenfoot{}}
 
 
 \ifGBN@plain
@@ -896,37 +733,31 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
 \fi
 
 % Dinge, die direkt bei \begin{document} zu tun sind
-\AtBeginDocument{
-  \ifGBN@plain%
+\AtBeginDocument{%
+  \ifGBN@plain
     \thispagestyle{regularpage}%
-  \else%
+  \else
     \thispagestyle{first}%
     \setlength\textheight{%
       \GBN@paperHeight %
       - \GBN@rHeadHeight %
       - \GBN@rHeadSep %
       - \GBN@rFootHeight %
-      - \GBN@rFootSep}
-    \begin{flushright}%
-      \GBN@datum%
-      \vspace*{\GBN@subjectsep}%
-    \end{flushright}%
-    \ifx\GBN@betreff\empty%
-    \else\textbf{\GBN@betreff}%
-    \vspace*{\GBN@salutsep} \par%
-    \fi%
-    \ifx \GBN@begruessung\empty%
-    \else\GBN@begruessung%
-    \vspace*{\GBN@bodysep} \par%
-    \fi%
-  \fi%
-}
+      - \GBN@rFootSep}%
+    \ifdim\GBN@subjectsep>\z@\vspace*{\GBN@subjectsep}\fi
+    \ifx\GBN@betreff\empty\else
+      \textbf{\GBN@betreff}\vspace*{\GBN@salutsep}\par
+    \fi
+    \ifx\GBN@begruessung\empty\else
+      \GBN@begruessung\vspace*{\GBN@bodysep}\par
+    \fi
+  \fi}
 
 % Dinge, die direkt bei \end{document} zu tun sind
 \AtEndDocument{
   \hypersetup{
     pdftitle={\GBN@betreff},
-    pdfauthor={\GBN@fromTitel \GBN@fromName},
+    pdfauthor={\GBN@senderName},
   }
   \par
   \ifGBN@plain%
@@ -947,11 +778,6 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
     \parbox{\textwidth}{\hfill\GBN@anlagen\medskip}\\%
   \fi%
 }
-
-% this needs to be down here as it messes up the \AtEndDocument which is used above.
-% see https://tex.stackexchange.com/a/212214
-\RequirePackage{pageslts}
-\pagenumbering{arabic}
 
 \def\rulers#1#2{
   \newcounter{x}

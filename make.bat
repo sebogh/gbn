@@ -14,10 +14,10 @@ GOTO :eof
 pdflatex gbn.ins
 pdflatex gbn.dtx
 pdflatex gbn.dtx
-pdflatex test-simple.tex
-pdflatex test-simple.tex
-pdflatex test-complete.tex
-pdflatex test-complete.tex
+xelatex test-simple.tex
+xelatex test-simple.tex
+xelatex test-complete.tex
+xelatex test-complete.tex
 GOTO :eof
 
 :CLEAN
